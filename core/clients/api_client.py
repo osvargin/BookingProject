@@ -1,8 +1,11 @@
 import os
 
+import allure
 import requests
 from dotenv import load_dotenv
 
+from core.clients.endpoints import Endpoints
+from core.settings.config import Users, Timeouts
 from core.settings.environments import Environments
 
 load_dotenv()
@@ -17,7 +20,8 @@ class APIClient:
             raise ValueError(f'Unsupported environment value: {environment_str}')
 
         self.base_url = self.get_base_url(environment)
-        self.headers = {'Content-Type': 'application/json'}
+        self.session = requests.Session()
+        self.session.headers = {'Content-Type': 'application/json'}
 
     def get_base_url(self, environment: Environments) -> str:
         if environment == Environments.test:
@@ -40,3 +44,24 @@ class APIClient:
         if status_code:
             assert response.status_code == status_code
         return response.json()
+
+    def ping(self):
+        with allure.step('Ping API client'):
+            url = f"{self.base_url}{Endpoints.ping_endpoint}"
+            response = self.session.get(url)
+            response.raise_for_status()
+        with allure.step('Checking status code'):
+            assert response.status_code == 201, f"Expexted status 201 but get {response.status_code}"
+        return response.status_code
+
+    def auth(self):
+        with allure.step('Getting authentificate'):
+            url = f"{self.base_url}{Endpoints.auth_endpoint}"
+            payload = {"username": Users.username, "password": Users.password}
+            response = self.session.post(url, json=payload, timeout=Timeouts.timeout)
+            response.raise_for_status()
+        with allure.step('Checking status code'):
+            assert response.status_code == 200, f"Expexted status 200 but get {response.status_code}"
+        token = response.json()['token']
+        with allure.step('Updating header with autorization'):
+            self.session.headers.update({'Authorization': f'Bearer {token}'})
