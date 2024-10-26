@@ -58,7 +58,7 @@ class APIClient:
     def auth(self):
         with allure.step('Getting authentificate'):
             url = f"{self.base_url}{Endpoints.auth_endpoint.value}"
-            payload = {"username": Users.username, "password": Users.password}
+            payload = {"username": Users.username.value, "password": Users.password.value}
             response = self.session.post(url, json=payload)
             response.raise_for_status()
         with allure.step('Checking status code'):
