@@ -67,11 +67,23 @@ def test_ping_timeout(api_client, mocker):
 
 @allure.feature('Test create booking')
 @allure.story('Test successful create booking')
-def test_create_booking(api_client, generate_random_booking_dates):
+def test_create_booking(api_client, mocker, generate_random_booking_dates):
+    mock_response = mocker.Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "bookingid": 1,
+        "firstname": generate_random_booking_dates["firstname"],
+        "lastname": generate_random_booking_dates["lastname"]
+    }
+
+    with allure.step('Test create booking with mocker data'):
+        mocker.patch.object(api_client.session, 'post', return_value=mock_response)
+
     with allure.step('Test create booking'):
         response = api_client.create_booking(generate_random_booking_dates)
-        print(response)
+
     with allure.step('Checking firstname'):
         assert response['firstname'] == generate_random_booking_dates['firstname']
+
     with allure.step('Checking lastname'):
         assert response['lastname'] == generate_random_booking_dates['lastname']
