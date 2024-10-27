@@ -91,7 +91,7 @@ class APIClient:
             response = self.session.post(url, json=booking_data, timeout=Timeouts.timeout.value)
             response.raise_for_status()
         with allure.step('Checking status code'):
-            assert response.status_code == 200, f"Expexted status 200 but got {response.status_code}"
+            assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
         return response.json()
 
     def get_booking_ids(self, params=None):
@@ -100,7 +100,7 @@ class APIClient:
             response = self.session.get(url, params=params, timeout=Timeouts.timeout.value)
             response.raise_for_status()
         with allure.step('Checking status code'):
-            assert response.status_code == 200, f"Expexted status 200 but got {response.status_code}"
+            assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
         return response.json()
 
     def update_booking(self, booking_id, booking_data):
@@ -109,7 +109,7 @@ class APIClient:
             response = self.session.put(url, json=booking_data, timeout=Timeouts.timeout.value)
             response.raise_for_status()
         with allure.step('Checking status code'):
-            assert response.status_code == 200, f"Expexted status 200 but got {response.status_code}"
+            assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
         return response.json()
 
     def partial_update_booking(self, booking_id, booking_data):
@@ -118,5 +118,5 @@ class APIClient:
             response = self.session.put(url, json=booking_data, timeout=Timeouts.timeout.value)
             response.raise_for_status()
         with allure.step('Checking status code'):
-            assert response.status_code == 200, f"Expexted status 200 but got {response.status_code}"
+            assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
         return response.json()
