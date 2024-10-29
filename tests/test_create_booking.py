@@ -1,3 +1,5 @@
+import random
+
 import allure
 from pydantic import ValidationError
 
@@ -39,3 +41,5 @@ def test_create_booking_with_custom_data(api_client):
         assert response['booking']['bookingdates']['checkout'] == booking_data['bookingdates']['checkout']
     with allure.step('Checking additionalneeds'):
         assert response['booking']['additionalneeds'] == booking_data['additionalneeds']
+
+
