@@ -39,7 +39,8 @@ def generate_random_booking_dates(booking_dates):
         'lastname': lastname,
         'totalprice': totalprice,
         'depositpaid': depositpaid,
-        'additionalneeds': additionalneeds,
+        'bookingdates': booking_dates,
+        'additionalneeds': additionalneeds
     }
 
     return data
